@@ -1,0 +1,156 @@
+{
+  "Crypto": {
+    "key": "ShVmYq3t6w9z$C&F)H@McQfTjWnZr4u7",
+    "algorithm": "aes-256-ctr"
+  },
+  "EVDatabase": {
+    "url": "https://ev-database.org/export_v26/74964691",
+    "key": ""
+  },
+  "CentralSystems": [
+    {
+      "type": "ocpp",
+      "implementation": "json",
+      "protocol": "ws",
+      "host": "localhost",
+      "port": 8010,
+      "debug": false
+    }
+  ],
+  "CentralSystemRestService": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 81,
+    "userTokenKey": "s3A9js135sdf384hgj384ku38lilckjflskdjf2797boeiBhxQDM1GInRith",
+    "userTokenLifetimeHours": 12,
+    "userDemoTokenLifetimeDays": 365,
+    "userTechnicalTokenLifetimeDays": 365,
+    "passwordWrongNumberOfTrial": 3,
+    "passwordBlockedWaitTimeMin": 5,
+    "captchaSecretKey": "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe",
+    "captchaScore": 0.25,
+    "debug": false
+  },
+  "CentralSystemFrontEnd": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 45000
+  },
+  "CentralSystemServer": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 81
+  },
+  "OCPIService": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 9090,
+    "debug": false
+  },
+  "ODataService": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 9292,
+    "debug": false
+  },
+  "OICPService": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 9080,
+    "debug": false
+  },
+  "WSDLEndpoint": {
+    "baseSecureUrl": ""
+  },
+  "JsonEndpoint": {
+    "baseSecureUrl": ""
+  },
+  "OCPIEndpoint": {
+    "baseUrl": "http://localhost:9090"
+  },
+  "AsyncTask": {
+    "active": true,
+    "nbrTasksInParallel": 4
+  },
+  "Storage": {
+    "implementation": "mongodb",
+    "uri": "mongodb://evse-user:evse-user-pwd@127.0.0.1:27017/evse?replicaSet=rs0&authSource=evse",
+    "host": "localhost",
+    "port": 27017,
+    "user": "evse-user",
+    "password": "evse-user-pwd",
+    "database": "evse",
+    "poolSize": 200,
+    "replicaSet": "rs0",
+    "debug": false
+  },
+  "Axios": {
+    "retries": 0,
+    "timeoutSecs": 30
+  },
+  "Email": {
+    "disableBackup": true,
+    "smtp": {
+      "from": "ev-charging@localhost.com",
+      "host": "localhost",
+      "port": 1025,
+      "secure": false,
+      "requireTLS": false,
+      "user": "evse-mail-user",
+      "password": "evse-mail-pwd"
+    }
+  },
+  "Firebase": {
+    "type": "",
+    "projectID": "",
+    "privateKeyID": "",
+    "privateKey": "",
+    "clientEmail": "",
+    "clientID": "",
+    "authURI": "",
+    "tokenURI": "",
+    "authProviderX509CertURL": "",
+    "clientX509CertURL": ""
+  },
+  "Notification": {
+    "Email": {
+      "enabled": false
+    },
+    "RemotePushNotification": {
+      "enabled": false
+    }
+  },
+  "Authorization": {
+    "debug": false
+  },
+  "ChargingStation": {
+    "heartbeatIntervalOCPPSSecs": 180,
+    "heartbeatIntervalOCPPJSecs": 3600,
+    "pingIntervalOCPPJSecs": 60,
+    "monitoringIntervalOCPPJSecs": 600,
+    "checkEndOfChargeNotificationAfterMin": 5,
+    "notifBeforeEndOfChargePercent": 85,
+    "notifBeforeEndOfChargeEnabled": true,
+    "notifEndOfChargePercent": 0,
+    "notifEndOfChargeEnabled": true,
+    "notifStopTransactionAndUnlockConnector": false,
+    "maxLastSeenIntervalSecs": 540
+  },
+  "Migration": {
+    "active": true
+  },
+  "Scheduler": {
+    "active": false,
+    "tasks": []
+  },
+  "Trace": {
+    "traceIngressHttp": false,
+    "traceEgressHttp": false,
+    "traceOcpp": false,
+    "traceDatabase": false,
+    "traceNotification": false
+  },
+  "Logging": {
+    "logLevel": "D"
+  }
+}
