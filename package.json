@@ -159,7 +159,7 @@
     "swagger-ui-express": "^4.5.0",
     "tslib": "^2.4.0",
     "tz-lookup": "^6.1.25",
-    "urlencode": "^1.1.0",
+    "urlencode": "^2.0.0",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.10.0",
     "validator": "^13.7.0",
     "ws": "^8.10.0"
@@ -205,7 +205,7 @@
     "@types/rfc2047": "^2.0.1",
     "@types/rosie": "0.0.40",
     "@types/tz-lookup": "^6.1.0",
-    "@types/urlencode": "^1.1.2",
+    "@types/urlencode": "^2.0.0",
     "@types/uuid": "^8.3.4",
     "@types/validator": "^13.7.9",
     "@types/ws": "^8.5.3",
