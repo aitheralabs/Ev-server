@@ -1,0 +1,15 @@
+{
+  "$id": "subscription-get",
+  "title": "Get one Subscription",
+  "type": "object",
+  "properties": {
+    "ID": {
+      "type": "string",
+      "sanitize": "mongo"
+    },
+    "ProjectFields": {
+      "$ref": "common#/definitions/projectFields"
+    }
+  },
+  "required": ["ID"]
+}

@@ -370,6 +370,18 @@ export enum ServerAction {
   TENANT_DELETE = 'TenantDelete',
   TENANT_LOGO = 'TenantLogo',
 
+  SUBSCRIPTION_PLAN_CREATE = 'SubscriptionPlanCreate',
+  SUBSCRIPTION_PLANS = 'SubscriptionPlans',
+  SUBSCRIPTION_PLAN = 'SubscriptionPlan',
+  SUBSCRIPTION_PLAN_UPDATE = 'SubscriptionPlanUpdate',
+  SUBSCRIPTION_PLAN_DELETE = 'SubscriptionPlanDelete',
+  SUBSCRIPTION_CREATE = 'SubscriptionCreate',
+  SUBSCRIPTIONS = 'Subscriptions',
+  SUBSCRIPTION = 'Subscription',
+  SUBSCRIPTION_UPDATE = 'SubscriptionUpdate',
+  SUBSCRIPTION_CANCEL = 'SubscriptionCancel',
+  SUBSCRIPTION_USAGE = 'SubscriptionUsage',
+
   COMPANY_CREATE = 'CompanyCreate',
   COMPANIES = 'Companies',
   COMPANY = 'Company',
@@ -615,6 +627,13 @@ export enum RESTServerRoute {
 
   REST_TENANTS = 'tenants',
   REST_TENANT = 'tenants/:id',
+
+  REST_SUBSCRIPTION_PLANS = 'subscription-plans',
+  REST_SUBSCRIPTION_PLAN = 'subscription-plans/:id',
+  REST_SUBSCRIPTIONS = 'subscriptions',
+  REST_SUBSCRIPTION = 'subscriptions/:id',
+  REST_SUBSCRIPTION_CANCEL = 'subscriptions/:id/cancel',
+  REST_SUBSCRIPTION_USAGE = 'subscriptions/:id/usage',
   REST_TENANT_DATA = 'tenants/:id/data',
   REST_TENANT_LOGO = 'tenants/logo',
   REST_TENANT_EMAIL_LOGO = 'tenants/email-logo',

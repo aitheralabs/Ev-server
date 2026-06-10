@@ -1,0 +1,31 @@
+{
+  "$id": "subscription-create",
+  "title": "Create a Tenant Subscription",
+  "type": "object",
+  "properties": {
+    "tenantID": {
+      "type": "string",
+      "sanitize": "mongo"
+    },
+    "planID": {
+      "type": "string",
+      "sanitize": "mongo"
+    },
+    "billingCycle": {
+      "type": "string",
+      "enum": ["monthly", "annual"],
+      "sanitize": "mongo"
+    },
+    "stripeCustomerID": {
+      "type": "string",
+      "sanitize": "mongo",
+      "maxLength": 255
+    },
+    "stripeSubscriptionID": {
+      "type": "string",
+      "sanitize": "mongo",
+      "maxLength": 255
+    }
+  },
+  "required": ["tenantID", "planID", "billingCycle"]
+}

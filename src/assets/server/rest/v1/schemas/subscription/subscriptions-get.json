@@ -1,0 +1,32 @@
+{
+  "$id": "subscriptions-get",
+  "title": "Get all Subscriptions",
+  "type": "object",
+  "properties": {
+    "Search": {
+      "$ref": "common#/definitions/search"
+    },
+    "TenantID": {
+      "type": "string",
+      "sanitize": "mongo"
+    },
+    "Status": {
+      "type": "string",
+      "enum": ["trialing", "active", "past_due", "canceled", "suspended"],
+      "sanitize": "mongo"
+    },
+    "Limit": {
+      "$ref": "common#/definitions/limit"
+    },
+    "Skip": {
+      "$ref": "common#/definitions/skip"
+    },
+    "SortFields": {
+      "$ref": "common#/definitions/sortFields"
+    },
+    "ProjectFields": {
+      "$ref": "common#/definitions/projectFields"
+    }
+  },
+  "required": ["Limit"]
+}

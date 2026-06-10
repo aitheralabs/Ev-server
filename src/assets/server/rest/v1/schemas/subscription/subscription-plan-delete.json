@@ -1,0 +1,12 @@
+{
+  "$id": "subscription-plan-delete",
+  "title": "Delete a Subscription Plan",
+  "type": "object",
+  "properties": {
+    "ID": {
+      "type": "string",
+      "sanitize": "mongo"
+    }
+  },
+  "required": ["ID"]
+}

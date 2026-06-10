@@ -1,0 +1,88 @@
+{
+  "$id": "subscription-plan-update",
+  "title": "Update a Subscription Plan",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "sanitize": "mongo"
+    },
+    "name": {
+      "type": "string",
+      "sanitize": "mongo",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "slug": {
+      "type": "string",
+      "sanitize": "mongo",
+      "minLength": 1,
+      "maxLength": 50,
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "description": {
+      "type": "string",
+      "sanitize": "mongo",
+      "maxLength": 500
+    },
+    "monthlyPrice": {
+      "type": "number",
+      "minimum": 0
+    },
+    "annualPrice": {
+      "type": "number",
+      "minimum": 0
+    },
+    "currency": {
+      "type": "string",
+      "sanitize": "mongo",
+      "minLength": 3,
+      "maxLength": 3
+    },
+    "stripePriceIdMonthly": {
+      "type": "string",
+      "sanitize": "mongo",
+      "maxLength": 255
+    },
+    "stripePriceIdAnnual": {
+      "type": "string",
+      "sanitize": "mongo",
+      "maxLength": 255
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "maxChargingStations": { "type": "integer", "minimum": -1 },
+        "maxUsers": { "type": "integer", "minimum": -1 },
+        "maxSites": { "type": "integer", "minimum": -1 },
+        "maxTransactionsPerMonth": { "type": "integer", "minimum": -1 },
+        "maxEnergyKwhPerMonth": { "type": "integer", "minimum": -1 },
+        "ocpiEnabled": { "type": "boolean" },
+        "oicpEnabled": { "type": "boolean" },
+        "smartChargingEnabled": { "type": "boolean" },
+        "advancedAnalytics": { "type": "boolean" },
+        "apiAccess": { "type": "boolean" },
+        "customBranding": { "type": "boolean" },
+        "prioritySupport": { "type": "boolean" }
+      }
+    },
+    "platformCommissionPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "trialDays": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 90
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "sortOrder": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": ["id"]
+}

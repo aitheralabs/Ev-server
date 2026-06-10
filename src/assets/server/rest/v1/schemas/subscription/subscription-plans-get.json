@@ -1,0 +1,27 @@
+{
+  "$id": "subscription-plans-get",
+  "title": "Get all Subscription Plans",
+  "type": "object",
+  "properties": {
+    "Search": {
+      "$ref": "common#/definitions/search"
+    },
+    "OnlyActive": {
+      "type": "boolean",
+      "sanitize": "mongo"
+    },
+    "Limit": {
+      "$ref": "common#/definitions/limit"
+    },
+    "Skip": {
+      "$ref": "common#/definitions/skip"
+    },
+    "SortFields": {
+      "$ref": "common#/definitions/sortFields"
+    },
+    "ProjectFields": {
+      "$ref": "common#/definitions/projectFields"
+    }
+  },
+  "required": ["Limit"]
+}

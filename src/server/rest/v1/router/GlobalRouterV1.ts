@@ -16,6 +16,7 @@ import PricingRouter from './api/PricingRouter';
 import RegistrationTokenRouter from './api/RegistrationTokenRouter';
 import SessionHashService from '../service/SessionHashService';
 import SettingRouter from './api/SettingRouter';
+import SubscriptionRouter from './api/SubscriptionRouter';
 import SiteAreaRouter from './api/SiteAreaRouter';
 import SiteRouter from './api/SiteRouter';
 import StaticResourceRouter from './doc/StaticResourceRouter';
@@ -71,6 +72,7 @@ export default class GlobalRouterV1 {
         new RegistrationTokenRouter().buildRoutes(),
         new SiteAreaRouter().buildRoutes(),
         new SettingRouter().buildRoutes(),
+        new SubscriptionRouter().buildRoutes(),
         new SiteRouter().buildRoutes(),
         new StatisticsRouter().buildRoutes(),
         new TagRouter().buildRoutes(),
