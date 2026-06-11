@@ -1,10 +1,13 @@
 import AppError from '../../../../exception/AppError';
 import ChargingStationStorage from '../../../../storage/mongodb/ChargingStationStorage';
+import Constants from '../../../../utils/Constants';
 import { HTTPError } from '../../../../types/HTTPError';
 import Logging from '../../../../utils/Logging';
+import { ServerAction } from '../../../../types/Server';
 import SiteStorage from '../../../../storage/mongodb/SiteStorage';
 import { SubscriptionStatus } from '../../../../types/Subscription';
 import SubscriptionStorage from '../../../../storage/mongodb/SubscriptionStorage';
+import TenantStorage from '../../../../storage/mongodb/TenantStorage';
 import UserStorage from '../../../../storage/mongodb/UserStorage';
 
 const MODULE_NAME = 'SubscriptionLimitService';
@@ -15,6 +18,10 @@ export default class SubscriptionLimitService {
    * Check if the tenant's subscription allows creating more of the given resource.
    * Returns silently if allowed, throws AppError if limit exceeded.
    * If no subscription exists for the tenant, allows the action (backwards compatibility).
+   *
+   * @param {string} tenantID Tenant ID
+   * @param {string} resource Resource type
+   * @param {string} methodName Method name
    */
   public static async checkSubscriptionLimit(
       tenantID: string,
@@ -78,6 +85,8 @@ export default class SubscriptionLimitService {
   /**
    * Recalculate and update usage counters for a tenant's subscription.
    * Call this after creating or deleting resources.
+   *
+   * @param {string} tenantID Tenant ID
    */
   public static async refreshUsageCounters(tenantID: string): Promise<void> {
     const subscription = await SubscriptionStorage.getTenantSubscriptionByTenantID(tenantID);
@@ -86,16 +95,29 @@ export default class SubscriptionLimitService {
     }
     try {
       // Count actual resources in the tenant's database
-      // These use the tenant-scoped collections
+      const tenant = await TenantStorage.getTenant(tenantID);
+      if (!tenant) {
+        return;
+      }
       const usage = { ...subscription.usage };
+
+      const chargingStationsCount = await ChargingStationStorage.getChargingStations(tenant, {}, Constants.DB_PARAMS_COUNT_ONLY);
+      usage.chargingStations = chargingStationsCount.count;
+
+      const usersCount = await UserStorage.getUsers(tenant, {}, Constants.DB_PARAMS_COUNT_ONLY);
+      usage.users = usersCount.count;
+
+      const sitesCount = await SiteStorage.getSites(tenant, {}, Constants.DB_PARAMS_COUNT_ONLY);
+      usage.sites = sitesCount.count;
+
       // Update the subscription with fresh counts
       await SubscriptionStorage.updateSubscriptionUsage(subscription.id, usage);
     } catch (error) {
       await Logging.logError({
         tenantID, module: MODULE_NAME, method: 'refreshUsageCounters',
-        message: `Failed to refresh usage counters: ${error.message}`,
-        action: 'SubscriptionUsageRefresh' as any,
-        detailedMessages: { error: error.stack }
+        message: `Failed to refresh usage counters: ${(error as Error).message}`,
+        action: ServerAction.SUBSCRIPTION_UPDATE,
+        detailedMessages: { error: (error as Error).stack }
       });
     }
   }

@@ -12,6 +12,7 @@ import Logging from '../../utils/Logging';
 import { ServerAction } from '../../types/Server';
 import Site from '../../types/Site';
 import SiteStorage from '../../storage/mongodb/SiteStorage';
+import SubscriptionLimitService from '../../server/rest/v1/service/SubscriptionLimitService';
 import TenantStorage from '../../storage/mongodb/TenantStorage';
 import UserStorage from '../../storage/mongodb/UserStorage';
 import Utils from '../../utils/Utils';
@@ -70,8 +71,8 @@ export default class UsersImportAsyncTask extends AbstractAsyncTask {
                 tenantID: tenant.id,
                 action: ServerAction.USERS_IMPORT,
                 module: MODULE_NAME, method: 'executeAsyncTask',
-                message: `Cannot import User with email '${importedUser.email}': ${error.message}`,
-                detailedMessages: { importedUser, error: error.stack }
+                message: `Cannot import User with email '${importedUser.email}': ${(error as Error).message}`,
+                detailedMessages: { importedUser, error: (error as Error).stack }
               });
             }
           }
@@ -85,6 +86,8 @@ export default class UsersImportAsyncTask extends AbstractAsyncTask {
             });
           }
         } while (!Utils.isEmptyArray(importedUsers?.result));
+        // Refresh usage counters
+        await SubscriptionLimitService.refreshUsageCounters(tenant.id);
         // Log final results
         const executionDurationSecs = Math.round((new Date().getTime() - startTime) / 1000);
         await Logging.logActionsResponse(tenant.id, ServerAction.USERS_IMPORT, MODULE_NAME, 'processTenant', result,
@@ -95,7 +98,7 @@ export default class UsersImportAsyncTask extends AbstractAsyncTask {
         );
       } catch (error) {
         // Log error
-        await Logging.logActionExceptionMessage(tenant.id, ServerAction.USERS_IMPORT, error);
+        await Logging.logActionExceptionMessage(tenant.id, ServerAction.USERS_IMPORT, error as Error);
       } finally {
         // Release the lock
         await LockingManager.release(importUsersLock);

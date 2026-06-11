@@ -33,6 +33,7 @@ import { ServerAction } from '../../../../types/Server';
 import SmartChargingHelper from '../../../../integration/smart-charging/SmartChargingHelper';
 import { StartTransactionErrorCode } from '../../../../types/Transaction';
 import { StatusCodes } from 'http-status-codes';
+import SubscriptionLimitService from './SubscriptionLimitService';
 import Tag from '../../../../types/Tag';
 import TagStorage from '../../../../storage/mongodb/TagStorage';
 import { UserInErrorType } from '../../../../types/InError';
@@ -241,6 +242,8 @@ export default class UserService {
     if (!user.issuer) {
       // Delete User
       await UserStorage.deleteUser(req.tenant, user.id);
+      // Refresh usage counters
+      await SubscriptionLimitService.refreshUsageCounters(req.tenant.id);
       await Logging.logInfo({
         tenantID: req.tenant.id,
         user: req.user, actionOnUser: user,
@@ -260,6 +263,8 @@ export default class UserService {
     await UserService.checkAndDeleteCar(req.tenant, req.user, user);
     // Delete User
     await UserStorage.deleteUser(req.tenant, user.id);
+    // Refresh usage counters
+    await SubscriptionLimitService.refreshUsageCounters(req.tenant.id);
     // Log
     await Logging.logInfo({
       tenantID: req.tenant.id,
@@ -728,8 +733,12 @@ export default class UserService {
       createdOn: new Date(),
       issuer: true,
     } as User;
+    // Check limit
+    await SubscriptionLimitService.checkSubscriptionLimit(req.tenant.id, 'users', 'handleCreateUser');
     // Create the User
     newUser.id = await UserStorage.saveUser(req.tenant, newUser, true);
+    // Refresh usage counters
+    await SubscriptionLimitService.refreshUsageCounters(req.tenant.id);
     // Save password
     if (newUser.password) {
       const newPasswordHashed = await Utils.hashPasswordBcrypt(newUser.password);

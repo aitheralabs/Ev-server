@@ -45,6 +45,7 @@ import SiteArea from '../../../../types/SiteArea';
 import SiteStorage from '../../../../storage/mongodb/SiteStorage';
 import SmartChargingFactory from '../../../../integration/smart-charging/SmartChargingFactory';
 import { StatusCodes } from 'http-status-codes';
+import SubscriptionLimitService from './SubscriptionLimitService';
 import Tag from '../../../../types/Tag';
 import TagStorage from '../../../../storage/mongodb/TagStorage';
 import { TransactionStatus } from '../../../../types/Transaction';
@@ -397,6 +398,8 @@ export default class ChargingStationService {
       // Delete physically
       await ChargingStationStorage.deleteChargingStation(req.tenant, chargingStation.id);
     }
+    // Refresh usage counters
+    await SubscriptionLimitService.refreshUsageCounters(req.tenant.id);
     await Logging.logInfo({
       tenantID: req.tenant.id,
       user: req.user, module: MODULE_NAME, method: 'handleDeleteChargingStation',

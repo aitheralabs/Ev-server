@@ -16,6 +16,7 @@ import Site from '../../../../types/Site';
 import SiteStorage from '../../../../storage/mongodb/SiteStorage';
 import SiteValidatorRest from '../validator/SiteValidatorRest';
 import { StatusCodes } from 'http-status-codes';
+import SubscriptionLimitService from './SubscriptionLimitService';
 import { TenantComponents } from '../../../../types/Tenant';
 import Utils from '../../../../utils/Utils';
 import UtilsService from './UtilsService';
@@ -169,6 +170,8 @@ export default class SiteService {
       req.tenant, req.user, siteID, Action.DELETE, action);
     // Delete
     await SiteStorage.deleteSite(req.tenant, site.id);
+    // Refresh usage counters
+    await SubscriptionLimitService.refreshUsageCounters(req.tenant.id);
     await Logging.logInfo({
       ...LoggingHelper.getSiteProperties(site),
       tenantID: req.tenant.id,
@@ -312,8 +315,12 @@ export default class SiteService {
         UtilsService.assertObjectExists(action, billingAccount, `Billing Account ID '${filteredRequest.accountData.accountID}' does not exist`, MODULE_NAME, 'handleCreateSite', req.user);
       }
     }
+    // Check limit
+    await SubscriptionLimitService.checkSubscriptionLimit(req.tenant.id, 'sites', 'handleCreateSite');
     // Save
     site.id = await SiteStorage.saveSite(req.tenant, site, Utils.objectHasProperty(filteredRequest, 'image'));
+    // Refresh usage counters
+    await SubscriptionLimitService.refreshUsageCounters(req.tenant.id);
     await Logging.logInfo({
       ...LoggingHelper.getSiteProperties(site),
       tenantID: req.tenant.id,

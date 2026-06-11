@@ -38,6 +38,7 @@ import { ServerAction } from '../../../types/Server';
 import SiteArea from '../../../types/SiteArea';
 import SiteAreaStorage from '../../../storage/mongodb/SiteAreaStorage';
 import SmartChargingFactory from '../../../integration/smart-charging/SmartChargingFactory';
+import SubscriptionLimitService from '../../rest/v1/service/SubscriptionLimitService';
 import TransactionStorage from '../../../storage/mongodb/TransactionStorage';
 import User from '../../../types/User';
 import UserStorage from '../../../storage/mongodb/UserStorage';
@@ -67,6 +68,8 @@ export default class OCPPService {
       const heartbeatIntervalSecs = this.getHeartbeatInterval(headers.ocppProtocol);
       // Check Charging Station
       if (!chargingStation) {
+        // Check Subscription Limit
+        await SubscriptionLimitService.checkSubscriptionLimit(tenant.id, 'chargingStations', 'handleBootNotification');
         // Create Charging Station
         chargingStation = await this.createChargingStationFromBootNotification(tenant, bootNotification, headers);
       } else {
@@ -79,6 +82,8 @@ export default class OCPPService {
       await OCPPUtils.checkAndApplyTemplateToChargingStation(tenant, chargingStation, false);
       // Save Charging Station
       await ChargingStationStorage.saveChargingStation(tenant, chargingStation);
+      // Refresh usage counters
+      await SubscriptionLimitService.refreshUsageCounters(tenant.id);
       // Save Boot Notification
       await OCPPStorage.saveBootNotification(tenant, bootNotification);
       // Notify
